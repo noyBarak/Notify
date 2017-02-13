@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">Notify_Poc</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+
+    <string name="type_time">Time</string>
+    <string name="type_call">Calls</string>
+    <string name="type_Sms">SMS</string>
+    <string name="type_location">Location</string>
+
+</resources>
