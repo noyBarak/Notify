@@ -51,7 +51,7 @@ import android.provider.BaseColumns;
          static final String KEY_LOCATION_LAT = "location_lat";
          static final String KEY_LOCATION_LON = "location_lon";
          static final String KEY_LOCATION_RAD = "location_radius";
-         static final String KEY_LOCATION_IN_OUT = "location_radius";
+         static final String KEY_LOCATION_IN_OUT = "location_inout";
          static final String KEY_LOCATION_TEXT = "location_text";
     }
 }

@@ -200,11 +200,11 @@ class DbHelper extends SQLiteOpenHelper {
             values.put(Constants.NotifyTime.KEY_TIME_AT, timeNotify.time_at_ms);
             values.put(Constants.NotifyTime.KEY_TIME_TEXT, timeNotify.time_text);
 
-            userId = db.insertOrThrow(Constants.NotifySms.TABLE_SMS, null, values);
+            userId = db.insertOrThrow(Constants.NotifyTime.TABLE_TIME, null, values);
             db.setTransactionSuccessful();
 
         } catch (Exception e) {
-            Toast.makeText(context,"ERROR ADDING STUDENT",Toast.LENGTH_LONG).show();
+            Toast.makeText(context,"ERROR ADDING STUDENT"+e.toString(),Toast.LENGTH_LONG).show();
         } finally {
             db.endTransaction();
         }

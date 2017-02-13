@@ -5,9 +5,11 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -19,6 +21,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -112,24 +115,43 @@ public class MainActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
+        databaseHelper = DbHelper.getInstance(this);
 
         if (id == R.id.nav_camera) {
-            // Handle the camera action
+            /* create sample post
             CallObject newCallNotify = new CallObject();
             newCallNotify.call_number = "0505900789";
             newCallNotify.call_name = "David Ohayon";
             newCallNotify.call_in_out = 1;
             newCallNotify.call_text = "This is a test notification";
             // Add sample post to the database
-            databaseHelper = DbHelper.getInstance(this);
             long uId = databaseHelper.addCall(newCallNotify,this);
             Toast.makeText(this,"This is the recived id : " + uId,Toast.LENGTH_LONG).show();
+            */
+            TimeObject temp = new TimeObject();
+            temp.time_text = "text test";
+            temp.time_at_ms =  System.currentTimeMillis() + (60*1000);
+            databaseHelper.addTime(temp,this);
+            Toast.makeText(this,"ADDED TIME NOT.",Toast.LENGTH_SHORT).show();
+            //start time service
+            setAllTimeNotification();
+
 
         } else if (id == R.id.nav_gallery) {
-            setAllTimeNotification();
-        } else if (id == R.id.nav_slideshow) {
 
+
+        } else if (id == R.id.nav_slideshow) {
+            //start call Catching service
+            Intent intent = new Intent(this, CallDetectService.class);
+            List<CallObject> callsNotification = databaseHelper.getAllCallNotification();
+            intent.putParcelableArrayListExtra("listCalls", (ArrayList<? extends Parcelable>) callsNotification);
+            Log.e("Starting", "Call service");
+            startService(intent);
         } else if (id == R.id.nav_manage) {
+            Intent intent = new Intent(this, AService.class);
+            List<SmsObject> callsNotification = databaseHelper.getAllSmsNotification();
+            intent.putParcelableArrayListExtra("listSms", (ArrayList<? extends Parcelable>) callsNotification);
+            startService(intent);
 
         } else if (id == R.id.nav_share) {
 
@@ -145,14 +167,17 @@ public class MainActivity extends AppCompatActivity
     void setAllTimeNotification (){
         //read all Time Notify's
         List<TimeObject> allTimeNotify =  databaseHelper.getAllTimeNotification();
-
+        if(allTimeNotify == null || allTimeNotify.isEmpty()){
+            Toast.makeText(this,"No time NOtification",Toast.LENGTH_SHORT).show();
+        }
         for (TimeObject notification : allTimeNotify) {
+            Toast.makeText(this,"adding " + notification.time_at_ms,Toast.LENGTH_SHORT).show();
             calendar.set(Calendar.MILLISECOND, (int) notification.time_at_ms);
             myIntent.putExtra(MainActivity.PACKAGE_NAME + ".time_text",notification.time_text );
             pending_intent = PendingIntent.getBroadcast(MainActivity.this, notification.time_id,
                     myIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-            alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pending_intent);
+            alarmManager.set(AlarmManager.RTC_WAKEUP, notification.time_at_ms, pending_intent);
         }
     }
 
