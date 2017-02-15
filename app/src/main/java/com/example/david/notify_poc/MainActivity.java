@@ -118,21 +118,12 @@ public class MainActivity extends AppCompatActivity
         databaseHelper = DbHelper.getInstance(this);
 
         if (id == R.id.nav_camera) {
-            /* create sample post
-            CallObject newCallNotify = new CallObject();
-            newCallNotify.call_number = "0505900789";
-            newCallNotify.call_name = "David Ohayon";
-            newCallNotify.call_in_out = 1;
-            newCallNotify.call_text = "This is a test notification";
-            // Add sample post to the database
-            long uId = databaseHelper.addCall(newCallNotify,this);
-            Toast.makeText(this,"This is the recived id : " + uId,Toast.LENGTH_LONG).show();
-            */
+            // create sample post
+            /*
             TimeObject temp = new TimeObject();
-            temp.time_text = "text test";
-            temp.time_at_ms =  System.currentTimeMillis() + (60*1000);
-            databaseHelper.addTime(temp,this);
-            Toast.makeText(this,"ADDED TIME NOT.",Toast.LENGTH_SHORT).show();
+            temp.time_text = "text test _1_ ";
+            temp.time_at_ms =  System.currentTimeMillis() + 2000;
+            databaseHelper.addTime(temp,this);*/
             //start time service
             setAllTimeNotification();
 
@@ -168,16 +159,19 @@ public class MainActivity extends AppCompatActivity
         //read all Time Notify's
         List<TimeObject> allTimeNotify =  databaseHelper.getAllTimeNotification();
         if(allTimeNotify == null || allTimeNotify.isEmpty()){
-            Toast.makeText(this,"No time NOtification",Toast.LENGTH_SHORT).show();
+            Toast.makeText(this,"No time Notifications",Toast.LENGTH_SHORT).show();
         }
-        for (TimeObject notification : allTimeNotify) {
-            Toast.makeText(this,"adding " + notification.time_at_ms,Toast.LENGTH_SHORT).show();
-            calendar.set(Calendar.MILLISECOND, (int) notification.time_at_ms);
-            myIntent.putExtra(MainActivity.PACKAGE_NAME + ".time_text",notification.time_text );
-            pending_intent = PendingIntent.getBroadcast(MainActivity.this, notification.time_id,
-                    myIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-            alarmManager.set(AlarmManager.RTC_WAKEUP, notification.time_at_ms, pending_intent);
+        if (allTimeNotify != null) {
+            for (TimeObject notification : allTimeNotify) {
+                Intent intent = new Intent(this, TimeReciverService.class);
+                intent.putExtra("time_text",notification.time_text);
+                PendingIntent pendingIntent = PendingIntent.getBroadcast(
+                        this.getApplicationContext(),notification.time_id, intent, 0);
+                AlarmManager alarmManager = (AlarmManager)getSystemService(ALARM_SERVICE);
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTimeInMillis(notification.time_at_ms);
+                alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+            }
         }
     }
 

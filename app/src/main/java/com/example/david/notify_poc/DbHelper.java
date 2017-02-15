@@ -42,7 +42,7 @@ class DbHelper extends SQLiteOpenHelper {
         //create CALL TABLE
         String CREATE_CALL_TABLE = "CREATE TABLE " + Constants.NotifyCall.TABLE_CALL +
                 "(" +
-                Constants.NotifyCall.KEY_Call_ID+ " INTEGER PRIMARY KEY," +
+                Constants.NotifyCall.KEY_Call_ID+ " INTEGER PRIMARY KEY AUTOINCREMENT," +
                 Constants.NotifyCall.KEY_CALL_NUMBER + " TEXT," +
                 Constants.NotifyCall.KEY_CALL_DISPLAY_NAME + " TEXT," +
                 Constants.NotifyCall.KEY_CALL_IN_OUT + " INTEGER, " +
@@ -53,7 +53,7 @@ class DbHelper extends SQLiteOpenHelper {
         //create SMS TABLE
         String CREATE_SMS_TABLE = "CREATE TABLE " + Constants.NotifySms.TABLE_SMS +
                 "(" +
-                Constants.NotifySms.KEY_SMS_ID+ " INTEGER PRIMARY KEY," +
+                Constants.NotifySms.KEY_SMS_ID+ " INTEGER PRIMARY KEY AUTOINCREMENT," +
                 Constants.NotifySms.KEY_SMS_NUMBER + " TEXT," +
                 Constants.NotifySms.KEY_SMS_DISPLAY_NAME+ " TEXT," +
                 Constants.NotifySms.KEY_SMS_IN_OUT + " INTEGER, " +
@@ -64,7 +64,7 @@ class DbHelper extends SQLiteOpenHelper {
         //create TIME TABLE
         String CREATE_TIME_TABLE = "CREATE TABLE " + Constants.NotifyTime.TABLE_TIME +
                 "(" +
-                Constants.NotifyTime.KEY_TIME_ID + " INTEGER PRIMARY KEY," +
+                Constants.NotifyTime.KEY_TIME_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                 Constants.NotifyTime.KEY_TIME_AT + " TEXT," +
                 Constants.NotifyTime.KEY_TIME_TEXT + " TEXT" +
                 ")";
@@ -73,7 +73,7 @@ class DbHelper extends SQLiteOpenHelper {
         //create LOCATION TABLE
         String CREATE_LOCATION_TABLE = "CREATE TABLE " + Constants.NotifyLocation.TABLE_LOCATION +
                 "(" +
-                Constants.NotifyLocation.KEY_LOCATION_ID+ " INTEGER PRIMARY KEY," +
+                Constants.NotifyLocation.KEY_LOCATION_ID+ " INTEGER PRIMARY KEY AUTOINCREMENT," +
                 Constants.NotifyLocation.KEY_LOCATION_LAT + " TEXT," +
                 Constants.NotifyLocation.KEY_LOCATION_LON+ " TEXT," +
                 Constants.NotifyLocation.KEY_LOCATION_RAD + " INTEGER, " +
@@ -337,7 +337,7 @@ class DbHelper extends SQLiteOpenHelper {
             if (cursor.moveToFirst()) {
                 do {
                     TimeObject timeobj = new TimeObject();
-                    timeobj.time_id = cursor.getColumnIndex(Constants.NotifyTime.KEY_TIME_ID);
+                    timeobj.time_id = cursor.getInt(cursor.getColumnIndex(Constants.NotifyTime.KEY_TIME_ID));
                     timeobj.time_at_ms = Long.parseLong(cursor.getString(cursor.getColumnIndex(Constants.NotifyTime.KEY_TIME_AT)));
                     timeobj.time_text = cursor.getString(cursor.getColumnIndex(Constants.NotifyTime.KEY_TIME_TEXT));
                     timeList.add(timeobj);
