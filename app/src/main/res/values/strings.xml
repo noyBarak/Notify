@@ -10,5 +10,20 @@
     <string name="type_call">Calls</string>
     <string name="type_Sms">SMS</string>
     <string name="type_location">Location</string>
+    <string name="choose_alert">Please select specific address</string>
+
+    <!-- Extras names -->
+    <string name="ext_addr">address</string>
+    <string name="ext_dist">meter</string>
+    <string name="ext_location">loc_input</string>
+
+
+    <!-- Util -->
+    <string name="lat">Latitude</string>
+    <string name="lon">Longitude</string>
+    <string name="action_code">MY_ACTION</string>
+
+    <string name="ext_list">retAddrList</string>
+
 
 </resources>
